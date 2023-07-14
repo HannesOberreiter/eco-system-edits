@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" translate="no">
 
 <head>
+    <title>eco_system_edits 🌲🐟🐞🦉</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google" content="notranslate">
+
     <link rel="canonical" href="https://www.eco-system-edits.com">
     <!-- OpenGraph Tags -->
     <meta property="og:title" content="eco_system_edits 🌲🐟🐞🦉">
@@ -152,7 +156,7 @@
         <figure class="item">
             <img id="image0" class="image" src="assets/icons/black.png" />
             <figcaption>
-                <a id="link0" href="#" target="_blank">
+                <a id="link0" href="#" target="_blank" alt="placeholder">
                     <i id="label0"></i> <small id="name0"></small>
                 </a>
             </figcaption>
@@ -162,7 +166,7 @@
         <figure class="item">
             <img id="image1" class="image" src="assets/icons/black.png" />
             <figcaption>
-                <a id="link1" href="#" target="_blank">
+                <a id="link1" href="#" target="_blank" alt="placeholder">
                     <i id="label1"></i> <small id="name1"></small>
                 </a>
             </figcaption>
@@ -170,7 +174,7 @@
     </div>
     <div class="quarter quarterThird">
         <figure class="item">
-            <img id="image2" class="image" src="assets/icons/black.png" />
+            <img id="image2" class="image" src="assets/icons/black.png" alt="placeholder" />
             <figcaption>
                 <a id="link2" href="#" target="_blank">
                     <i id="label2"></i> <small id="name2"></small>
@@ -187,8 +191,10 @@
             <h2><a href="https://www.youtube.com/@eco_system_edits">YouTube: @eco_system_edits</a></h2>
 
             Made by:
-            <h4><a href="https://www.btree.at/">Hannes Oberreiter</a></h4>
-            <h4><a href="https://www.linkedin.com/in/anna-d%C3%BCnser-2043b18a/">Anna Dünser</a></h4>
+            <h4>
+                <a href="https://www.btree.at/">Hannes Oberreiter</a> <br /><br />
+                <a href="https://www.linkedin.com/in/anna-d%C3%BCnser-2043b18a/">Anna Dünser</a>
+            </h4>
         </div>
     </div>
 </body>
@@ -197,12 +203,13 @@
 
 <script>
     fetch(
-        `https://api.inaturalist.org/v2/observations?user_id=annhaarr,btree&locale=de&per_page=3&order_by=random&fields=(id:!t,uri:!t,taxon:(name:!t),photos:(url:!t),user:(name:!t))`
+        `https://api.inaturalist.org/v2/observations?user_id=annhaarr,btree&locale=de&per_page=3&order_by=random&fields=(id:!t,uri:!t,taxon:(name:!t),photos:(url:!t),user:(name:!t))&cacheBuster=${Math.random()}`
     )
         .then((result) => result.json())
         .then((data) => {
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`image${i}`).src = data.results[i].photos[0].url.replace('square', 'medium');
+                document.getElementById(`image${i}`).alt = data.results[i].taxon.name;
                 document.getElementById(`label${i}`).innerHTML = data.results[i].taxon.name + ",";
                 document.getElementById(`name${i}`).innerHTML = data.results[i].user.name;
                 document.getElementById(`link${i}`).href = data.results[i].uri;
