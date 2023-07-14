@@ -21,6 +21,5 @@ jobs:
           storagePassword: "${{ secrets.STORAGE_PASSWORD }}"
           accessKey: "${{ secrets.STORAGE_KEY }}"
           pullZoneId: "${{ secrets.ZONE_ID }}"
-          upload: "true"
           remove: "true"
           purgePullZone: "true"
