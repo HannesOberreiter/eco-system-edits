@@ -2,11 +2,6 @@ name: DeployLanding
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-
-env:
-  ZONE_ID: 1492677
 
 jobs:
   build:
