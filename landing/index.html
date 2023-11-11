@@ -83,6 +83,26 @@
             color: #e3e706;
         }
 
+        button {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
         .quarterFirst {
             background-image: url(assets/icons/orange.png);
             background-position: right bottom;
@@ -137,6 +157,7 @@
             height: auto;
             max-width: 100%;
             max-height: 30vh;
+            cursor: pointer;
         }
 
         @media (max-width: 767px) {
@@ -153,6 +174,7 @@
 </head>
 
 <body>
+    <button onclick="fetchImages()">Images ♻️</button>
     <div class="quarter quarterFirst">
         <figure class="item">
             <img id="image0" class="image" src="assets/icons/black.png" />
@@ -198,26 +220,64 @@
             </h4>
         </div>
     </div>
+    <dialog id="dialog" style="padding: 0;">
+        <img id="dialog-img" src="assets/icons/black.png" />
+    </dialog>
 </body>
 
 </html>
 
 <script>
-    fetch(
-        `https://api.inaturalist.org/v2/observations?user_id=annhaarr,btree&locale=de&per_page=3&order_by=random&fields=(id:!t,uri:!t,taxon:(name:!t),photos:(url:!t),user:(name:!t))&cacheBuster=${Math.random()}`
-    )
-        .then((result) => result.json())
-        .then((data) => {
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`image${i}`).src = data.results[i].photos[0].url.replace('square', 'medium');
-                document.getElementById(`image${i}`).alt = data.results[i].taxon.name;
-                document.getElementById(`label${i}`).innerHTML = data.results[i].taxon.name + ",";
-                document.getElementById(`name${i}`).innerHTML = data.results[i].user.name;
-                document.getElementById(`link${i}`).href = data.results[i].uri;
-            }
-        })
-        .catch((e) => {
-            console.error(e);
-        });
+    (function (window, document) {
+        let isLoading = false;
 
+        fetchImages();
+
+
+        document.querySelectorAll('.image').forEach(item => {
+            item.addEventListener('click', event => {
+                // fetchImages();
+            })
+        })
+
+        document.querySelectorAll('.image').forEach(item => {
+            item.addEventListener('click', event => {
+                document.getElementById('dialog-img').src = event.target.src.replace('medium', 'large');
+                document.getElementById('dialog').showModal();
+            })
+        })
+
+        document.getElementById('dialog').addEventListener('click', event => {
+            document.getElementById('dialog').close();
+            document.getElementById('dialog-img').src = 'assets/icons/black.png';
+        })
+
+
+        function fetchImages () {
+            if (isLoading) return;
+            isLoading = true;
+            fetch(
+                `https://api.inaturalist.org/v2/observations?user_id=annhaarr,btree&locale=de&per_page=3&order_by=random&fields=(id:!t,uri:!t,taxon:(name:!t),photos:(url:!t),user:(name:!t))&cacheBuster=${Math.random()}`
+            )
+                .then((result) => result.json())
+                .then((data) => {
+                    for (let i = 0; i < 3; i++) {
+                        document.getElementById(`image${i}`).src = data.results[i].photos[0].url.replace('square', 'medium');
+                        document.getElementById(`image${i}`).alt = data.results[i].taxon.name;
+                        document.getElementById(`label${i}`).innerHTML = data.results[i].taxon.name + ",";
+                        document.getElementById(`name${i}`).innerHTML = data.results[i].user.name;
+                        document.getElementById(`link${i}`).href = data.results[i].uri;
+                    }
+                })
+                .catch((e) => {
+                    console.error(e);
+                })
+                .finally(() => {
+                    isLoading = false;
+                });
+        }
+
+        window.fetchImages = fetchImages;
+
+    })(window, document);
 </script>
